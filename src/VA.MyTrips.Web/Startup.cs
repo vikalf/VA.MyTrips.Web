@@ -31,6 +31,9 @@ namespace VA.MyTrips.Web
 
         private void SetupGrpc(IServiceCollection services)
         {
+            AppContext.SetSwitch("System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport", true);
+
+
             var grpcProxy = Environment.GetEnvironmentVariable("GRPC_Proxy");
             var channel = GrpcChannel.ForAddress(grpcProxy);
             services.AddSingleton(new Service.Trip.TripClient(channel));

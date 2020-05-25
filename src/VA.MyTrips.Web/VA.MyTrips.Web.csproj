@@ -13,8 +13,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Protobuf Include="..\..\..\VA.MyTrips.Service\src\VA.MyTrips.Service\Protos\trip.proto" GrpcServices="Client">
-      <Link>Protos\trip.proto</Link>
+    <Protobuf Include="Protos\trip.proto" GrpcServices="Client">
+      <SourceUri>https://mytripsphotos.blob.core.windows.net/protos/trip.proto</SourceUri>
     </Protobuf>
   </ItemGroup>
 

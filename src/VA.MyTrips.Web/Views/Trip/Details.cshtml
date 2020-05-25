@@ -1,0 +1,91 @@
+﻿@model VA.MyTrips.Web.ViewModels.TripDetailedModel
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="mb-5">
+    <h3>@Model.Name</h3>
+    <hr />
+    <div class="mb-5">
+        @*@Html.ActionLink("Edit", "Edit", new { id = Model.TripId }, new { @class = "btn btn-primary mr-2" })*@
+        @Html.ActionLink("Back to List", "Index", new { id = Model.TripId }, new { @class = "btn btn-info" })
+    </div>
+    <dl class="row">
+
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Destination)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Destination)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.StartDate)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.StartDate)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.EndDate)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.EndDate)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.GeoLocation)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.GeoLocation)
+        </dd>
+    </dl>
+</div>
+
+<div class="mb-5">
+    <h5>Photos</h5>
+    <hr />
+
+    @if (Model.Photos.Any())
+    {
+        @foreach (var photo in Model.Photos)
+        {
+
+            <section class="border-light">
+                <div>
+                    <img class="trip-photo" src="@photo.Url" alt="Not Found" />
+                </div>
+                <div>
+
+                </div>
+            </section>
+        }
+    }
+    else
+    {
+        <p>You don't have photos for this trip at the moment.. try to upload some!</p>
+    }
+
+</div>
+
+<div>
+    <hr />
+    <form asp-action="UploadPhoto" enctype="multipart/form-data" method="post">
+        <input type="hidden" name="tripId" value="@Model.TripId" />
+
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text" id="inputGroupFileAddon01">Upload Photo</span>
+            </div>
+            <div class="custom-file">
+                <input type="file" class="custom-file-input" id="inputGroupFile01" name="files"
+                       aria-describedby="inputGroupFileAddon01">
+                <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
+            </div>
+        </div>
+
+        <input type="submit" value="Upload" class="btn btn-dark" />
+
+    </form>
+</div>
+

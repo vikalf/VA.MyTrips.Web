@@ -1,0 +1,48 @@
+﻿
+@model List<VA.MyTrips.Web.ViewModels.TripModel>
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="text-center">
+    <h1 class="display-4 mb-5">My Trips</h1>
+    @if (Model != null && Model.Any())
+    {
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">Name</th>
+                    <th scope="col">Destination</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                @foreach (var trip in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.ActionLink(trip.Name, "Details", new { id = trip.TripId })
+                        </td>
+                        <td>@trip.Destination</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p>You don't have any Trips recorded at this time, click "Add Trip" to start adding your experiences</p>
+    }
+
+
+    <div class="row">
+        @Html.ActionLink("Add", "Create", new {}, new { @class = "btn btn-primary mr-2" })
+        
+    </div>
+
+
+</div>
+
+
+

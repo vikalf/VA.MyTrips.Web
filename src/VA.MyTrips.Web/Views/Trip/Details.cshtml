@@ -51,12 +51,16 @@
         @foreach (var photo in Model.Photos)
         {
 
-            <section class="border-light">
-                <div>
-                    <img class="trip-photo" src="@photo.Url" alt="Not Found" />
+            <section class="trip-photo m-4">
+                <div class="mb-4">
+                    <img class="trip-photo-img" src="@photo.Url" alt="Not Found" />
                 </div>
                 <div>
-
+                    <form asp-action="Archive" method="post">
+                        <input name="tripId" type="hidden" value="@Model.TripId" />
+                        <input name="photoId" type="hidden" value="@photo.PhotoId" />
+                        <input type="submit" value="Archive" class="btn btn-info btn-sm" />
+                    </form>
                 </div>
             </section>
         }

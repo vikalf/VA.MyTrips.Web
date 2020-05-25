@@ -91,7 +91,7 @@ namespace VA.MyTrips.Web.Controllers
             try
             {
 
-                var file = files.FirstOrDefault();          
+                var file = files.FirstOrDefault();
 
                 if (file?.Length > 0)
                 {
@@ -114,6 +114,8 @@ namespace VA.MyTrips.Web.Controllers
 
             return View("Error");
         }
+
+
 
 
         #endregion

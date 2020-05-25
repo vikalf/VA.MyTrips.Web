@@ -3,7 +3,12 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30114.105
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VA.MyTrips.Web", "src\VA.MyTrips.Web\VA.MyTrips.Web.csproj", "{85D522D9-25FC-4CB6-94E4-4D21A52BD948}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VA.MyTrips.Web", "src\VA.MyTrips.Web\VA.MyTrips.Web.csproj", "{85D522D9-25FC-4CB6-94E4-4D21A52BD948}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Deployment", "Deployment", "{6A050444-0209-4578-8D71-7CD839ED5ECE}"
+	ProjectSection(SolutionItems) = preProject
+		Dockerfile = Dockerfile
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

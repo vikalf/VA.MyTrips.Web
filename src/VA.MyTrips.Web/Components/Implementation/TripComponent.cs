@@ -83,7 +83,7 @@ namespace VA.MyTrips.Web.Components.Implementation
         public async Task<bool> UploadPhoto(string tripId, byte[] file, string fileName)
         {
 
-            var request = new UploadPhotoRequest { TripId = tripId, FileName = fileName};
+            var request = new UploadPhotoRequest { TripId = tripId, FileName = fileName };
             request.Filebytes = ByteString.CopyFrom(file);
 
             var reply = await _tripclient.UploadPhotoAsync(request);

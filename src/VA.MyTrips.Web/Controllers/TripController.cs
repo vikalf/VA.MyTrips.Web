@@ -1,12 +1,11 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.Extensions.Logging;
 using VA.MyTrips.Web.Components.Definition;
 using VA.MyTrips.Web.ViewModels;
 
@@ -41,7 +40,7 @@ namespace VA.MyTrips.Web.Controllers
         }
 
         // GET: TripController/Details/5
-        public async Task<ActionResult> Details(int id)
+        public async Task<ActionResult> Details(string id)
         {
 
             try
@@ -87,22 +86,25 @@ namespace VA.MyTrips.Web.Controllers
         // POST: TripController/AddPhoto
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> UploadPhoto([FromForm] int tripId, List<IFormFile> files)
+        public async Task<ActionResult> UploadPhoto([FromForm] string tripId, List<IFormFile> files)
         {
             try
             {
 
-                var file = files.FirstOrDefault();
+                var file = files.FirstOrDefault();          
 
                 if (file?.Length > 0)
                 {
+                    var extension = Path.GetExtension(file.FileName);
+                    var newFileName = $"{Guid.NewGuid()}{extension}";
+
                     using var ms = new MemoryStream();
                     file.CopyTo(ms);
                     var fileBytes = ms.ToArray();
-                    var success = await _tripComponent.UploadPhoto(tripId, fileBytes);
+                    var success = await _tripComponent.UploadPhoto(tripId, fileBytes, newFileName);
 
                     if (success)
-                        return RedirectToAction(nameof(Index));
+                        return RedirectToAction(nameof(Details), new { id = tripId });
                 }
             }
             catch (Exception ex)

@@ -1,8 +1,9 @@
-﻿using System;
+﻿using Google.Protobuf;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
+using VA.MyTrips.Service;
 using VA.MyTrips.Web.Components.Definition;
 using VA.MyTrips.Web.ViewModels;
 
@@ -10,29 +11,89 @@ namespace VA.MyTrips.Web.Components.Implementation
 {
     public class TripComponent : ITripComponent
     {
+        private readonly Service.Trip.TripClient _tripclient;
 
-        public Task<List<TripModel>> GetTrips()
+        public TripComponent(Trip.TripClient tripclient)
         {
-            throw new NotImplementedException();
+            _tripclient = tripclient;
         }
 
-        public Task<TripDetailedModel> GetTripDetails(int tripId)
+        public async Task<List<ViewModels.TripModel>> GetTrips()
         {
-            throw new NotImplementedException();
+
+            var reply = await _tripclient.GetTripsAsync(new Service.EmtpyRequest(), deadline: DateTime.UtcNow.AddSeconds(5));
+
+            var result = (from t in reply.Trips
+                          select new ViewModels.TripModel
+                          {
+                              TripId = t.TripId,
+                              Name = t.Name,
+                              Destination = t.Destination
+                          }).ToList();
+
+            return result;
+
         }
 
-        public Task<TripDetailedModel> CreateTrip(TripDetailedModel newTrip)
+        public async Task<TripDetailedModel> GetTripDetails(string tripId)
         {
-            throw new NotImplementedException();
+            var reply = await _tripclient.GetTripAsync(new TripRequest { TripId = tripId }, deadline: DateTime.UtcNow.AddSeconds(5));
+
+            return new TripDetailedModel
+            {
+                TripId = reply.TripId,
+                Destination = reply.Destination,
+                Name = reply.Name,
+                EndDate = System.DateTime.Parse(reply.EndDate),
+                GeoLocation = reply.GeoLocation,
+                Photos = reply.Photos.Select(e => new ViewModels.PhotoModel
+                {
+                    TripId = e.TripId,
+                    Url = e.Url
+                }).ToList(),
+                StartDate = System.DateTime.Parse(reply.StartDate)
+            };
+
         }
 
-        public Task<bool> UploadPhoto(int tripId, byte[] file)
+        public async Task<TripDetailedModel> CreateTrip(TripDetailedModel newTrip)
         {
-            throw new NotImplementedException();
+            var reply = await _tripclient.CreateTripAsync(new CreateTripRequest
+            {
+                Name = newTrip.Name,
+                Destination = newTrip.Destination,
+                StartDate = newTrip.StartDate.ToString("g"),
+                EndDate = newTrip.EndDate.ToString("g"),
+                GeoLocation = newTrip.GeoLocation
+            }, deadline: DateTime.UtcNow.AddSeconds(5));
+
+            return new TripDetailedModel
+            {
+                Name = reply.Name,
+                Destination = reply.Destination,
+                GeoLocation = reply.GeoLocation,
+                EndDate = DateTime.Parse(reply.EndDate),
+                StartDate = DateTime.Parse(reply.StartDate),
+                TripId = reply.TripId,
+                Photos = new List<ViewModels.PhotoModel>()
+            };
+
         }
-        public Task<bool> ArchivePhoto(int tripId, string photoId)
+
+        public async Task<bool> UploadPhoto(string tripId, byte[] file, string fileName)
         {
-            throw new NotImplementedException();
+
+            var request = new UploadPhotoRequest { TripId = tripId, FileName = fileName};
+            request.Filebytes = ByteString.CopyFrom(file);
+
+            var reply = await _tripclient.UploadPhotoAsync(request);
+
+            return reply.IsSuccess;
+        }
+        public async Task<bool> ArchivePhoto(string tripId, string photoId)
+        {
+            var reply = await _tripclient.ArchivePhotoAsync(new ArchivePhotoRequest { TripId = tripId, PhotoId = photoId });
+            return reply.IsSuccess;
         }
     }
 }

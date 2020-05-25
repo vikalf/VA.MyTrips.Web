@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace VA.MyTrips.Web.Components.Definition
@@ -10,13 +7,13 @@ namespace VA.MyTrips.Web.Components.Definition
     {
         Task<List<ViewModels.TripModel>> GetTrips();
 
-        Task<ViewModels.TripDetailedModel> GetTripDetails(int tripId);
+        Task<ViewModels.TripDetailedModel> GetTripDetails(string tripId);
 
         Task<ViewModels.TripDetailedModel> CreateTrip(ViewModels.TripDetailedModel newTrip);
 
-        Task<bool> UploadPhoto(int tripId, byte[] file);
+        Task<bool> UploadPhoto(string tripId, byte[] file, string fileName);
 
-        Task<bool> ArchivePhoto(int tripId, string photoId);
+        Task<bool> ArchivePhoto(string tripId, string photoId);
 
     }
 }
